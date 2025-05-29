@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Embed Your Chatbot</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body class="embed-page">
+    <div class="container">
+        <header class="embed-header">
+            <h1>🤖 Embed Your Chatbot</h1>
+            <p class="subtitle">Share your chatbot anywhere with a simple embed code</p>
+        </header>
+
+        <main class="embed-content">
+            <div class="code-section">
+                <h2>Embed Code</h2>
+                <div class="code-container">
+                    <pre><code id="embedCode">&lt;iframe 
+    src="<%= process.env.BASE_URL %>/bot/<%= bot._id %>/chat"
+    width="400"
+    height="500"
+    style="border: none; border-radius: 10px;"
+    allow="microphone; camera"
+&gt;&lt;/iframe&gt;</code></pre>
+                    <button class="copy-btn" onclick="copyEmbedCode()">
+                        <span class="btn-text">Copy Code</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="preview-section">
+                <h2>Live Preview</h2>
+                <div class="preview-container">
+                    <iframe 
+                        src="<%= process.env.BASE_URL %>/bot/<%= bot._id %>/chat"
+                        width="400"
+                        height="500"
+                        style="border: none; border-radius: 10px;"
+                        allow="microphone; camera">
+                    </iframe>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div id="toast" class="toast">
+        <span class="toast-message"></span>
+    </div>
+
+    <script src="/js/embed.js"></script>
+</body>
+</html>
