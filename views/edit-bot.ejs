@@ -1,0 +1,33 @@
+<%- include('partials/header') %>
+
+<h2>Edit Bot: <%= bot.name %></h2>
+
+<form action="/bot/<%= bot._id %>/edit" method="POST">
+  <label for="name">Name:</label><br>
+  <input type="text" id="name" name="name" value="<%= bot.name %>" required><br><br>
+
+  <label for="type">Type:</label><br>
+  <input type="text" id="type" name="type" value="<%= bot.type %>" required><br><br>
+
+  <label for="tone">Tone:</label><br>
+  <input type="text" id="tone" name="tone" value="<%= bot.tone %>" required><br><br>
+
+  <label for="abilities">Abilities:</label><br>
+  <textarea id="abilities" name="abilities" rows="4" required><%= bot.abilities %></textarea><br><br>
+
+  <label for="goal">Goal:</label><br>
+  <textarea id="goal" name="goal" rows="4"><%= bot.goal %></textarea><br><br>
+
+  <label>Visibility:</label><br>
+  <input type="radio" id="public" name="visibility" value="public" <%= bot.visibility === 'public' ? 'checked' : '' %>>
+  <label for="public">Public</label><br>
+  <input type="radio" id="private" name="visibility" value="private" <%= bot.visibility === 'private' ? 'checked' : '' %>>
+  <label for="private">Private</label><br><br>
+ 
+
+  <button type="submit">Update Bot</button>
+</form>
+
+<a href="/my-bots">Back to My Bots</a>
+
+<%- include('partials/footer') %>

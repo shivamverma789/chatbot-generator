@@ -1,0 +1,35 @@
+<%- include('partials/header') %>
+
+<h1>Create Your Chatbot</h1>
+
+<form action="/create-bot" method="POST">
+    <label>Bot Name:</label>
+    <input type="text" name="name" required><br>
+
+    <label>Type:</label>
+    <select name="type" required>
+        <option value="basic">Basic Chatbot</option>
+        <option value="image_analyzer">Chat + Image Analyzer</option>
+        <option value="document_bot">PDF/Doc QA Bot</option>
+    </select><br>
+
+    <label>Tone/Personality:</label>
+    <input type="text" name="tone" placeholder="Friendly, formal, sarcastic..." required><br>
+
+    <label>Special Abilities:</label>
+    <input type="text" name="abilities" placeholder="Summarize, translate, recommend"><br>
+
+    <label>Goal (optional):</label>
+    <input type="text" name="goal" placeholder="e.g. Help users choose movies"><br>
+    <label>
+    <input type="radio" name="visibility" value="private" checked> Private
+    </label>
+    <label>
+    <input type="radio" name="visibility" value="public"> Public
+    </label>
+
+    <button type="submit">Preview Bot</button>
+
+</form>
+
+<%- include('partials/footer') %>

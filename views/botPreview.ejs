@@ -1,0 +1,16 @@
+<%- include('partials/header') %>
+
+<h2>Bot Preview</h2>
+<p><strong>Name:</strong> <%= bot.name %></p>
+<p><strong>Type:</strong> <%= bot.type %></p>
+<p><strong>Tone:</strong> <%= bot.tone %></p>
+<p><strong>Abilities:</strong> <%= bot.abilities %></p>
+<p><strong>Goal:</strong> <%= bot.goal || 'N/A' %></p>
+
+<!-- Chat Button -->
+<a href="/bot/<%= bot._id %>/chat" class="btn">Chat with <%= bot.name %></a>
+
+<br><br>
+<a href="/">Back to Home</a>
+
+<%- include('partials/footer') %>

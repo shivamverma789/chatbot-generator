@@ -1,0 +1,61 @@
+<!-- this page will be render on the embeded page  -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+   
+</head>
+<body>
+    
+<h2>Chat with <%= bot.name %></h2>
+
+<div id="chat-box" style="border: 1px solid #ccc; padding: 10px; height: 300px; overflow-y: auto;">
+    <!-- Messages will appear here -->
+</div>
+
+<form id="chat-form">
+    <input type="text" id="user-input" placeholder="Type your message..." required>
+    <button type="submit">Send</button>
+</form>
+
+<script>
+    const form = document.getElementById('chat-form');
+    const input = document.getElementById('user-input');
+    const chatBox = document.getElementById('chat-box');
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const message = input.value;
+        if (!message) return;
+
+        // Display user message
+        const userMsg = document.createElement('div');
+        userMsg.innerHTML = `<strong>You:</strong> ${message}`;
+        chatBox.appendChild(userMsg);
+
+        // Send message to backend
+        const res = await fetch(`/bot/<%= bot._id %>/chat`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ message })
+        });
+
+        const data = await res.json();
+
+        // Display bot reply
+        const botMsg = document.createElement('div');
+        botMsg.innerHTML = `<strong>Bot:</strong> ${data.reply}`;
+        chatBox.appendChild(botMsg);
+
+        chatBox.scrollTop = chatBox.scrollHeight;
+        input.value = '';
+    });
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,19 @@
+<%- include('partials/header') %>
+
+<h2>Explore Public Bots</h2>
+
+<% if (bots.length === 0) { %>
+  <p>No public bots available right now.</p>
+<% } else { %>
+  <ul>
+    <% bots.forEach(bot => { %>
+      <li>
+        <strong><%= bot.name %></strong> by <%= bot.admin.name %> <br>
+        <p><strong>Description:</strong> <%= bot.description || "No description" %></p>
+        <a href="/bot/<%= bot._id %>/chat" class="btn">Chat</a>
+      </li>
+    <% }) %>
+  </ul>
+<% } %>
+
+<%- include('partials/footer') %>
