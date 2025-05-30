@@ -888,7 +888,7 @@ section {
 /* Footer Styles */
 .footer-content {
   display: grid;
-  grid-template-columns: 1.5fr repeat(3, 1fr);
+  
   gap: 3rem;
   max-width: 1200px;
   margin: 0 auto;
