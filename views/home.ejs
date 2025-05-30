@@ -1,5 +1,506 @@
-<%- include('partials/header') %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Chatbot Builder - Create AI Chatbots Without Coding</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/home.css">
+  <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+</head>
+<body>
+  <!-- Include your common navbar here -->
+  <header>
+    <nav class="navbar">
+      <a href="/" class="navbar-brand">
+        <h1>🤖 Chatbot Builder</h1>
+      </a>
+      
+      <ul class="navbar-nav">
+        <li><a href="/" class="active">Home</a></li>
+        <% if (isAuthenticated) { %>
+          <li><a href="/create-bot">Create Bot</a></li>
+          <li><a href="/explore">Explore</a></li>
+          <li><a href="/my-bots">My Bots</a></li>
+          <li><a href="/auth/logout">Logout</a></li>
+        <% } else { %>
+          <li><a href="/auth/login" >Login</a></li>
+          <li><a href="/auth/register">Register</a></li>
+        <% } %>
+      </ul>
 
-home
+      <div class="hamburger" id="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </nav>
 
-<%- include('partials/footer') %>
+    <div class="mobile-menu" id="mobileMenu">
+      <ul>
+        <li><a href="/"class="active">Home</a></li>
+        <% if (isAuthenticated) { %>
+          <li><a href="/create-bot">Create Bot</a></li>
+          <li><a href="/explore">Explore</a></li>
+          <li><a href="/my-bots">My Bots</a></li>
+          <li><a href="/auth/logout">Logout</a></li>
+        <% } else { %>
+          <li><a href="/auth/login" >Login</a></li>
+          <li><a href="/auth/register">Register</a></li>
+        <% } %>
+      </ul>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1 class="hero-title">Build Intelligent <span class="gradient-text">Chatbots</span> Without Coding</h1>
+      <p class="hero-subtitle">Create, customize, and deploy AI-powered chatbots in minutes. Perfect for customer support, lead generation, and more.</p>
+      <div class="hero-buttons">
+        <a href="/auth/register" class="btn btn-primary">Get Started <span class="btn-icon">→</span></a>
+        <a href="#features" class="btn btn-secondary">Learn More <span class="btn-icon">↓</span></a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-item">
+          <span class="stat-number">10k+</span>
+          <span class="stat-label">Active Users</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">50k+</span>
+          <span class="stat-label">Chatbots Created</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">99%</span>
+          <span class="stat-label">Satisfaction</span>
+        </div>
+      </div>
+    </div>
+    <div class="hero-image">
+      <div class="chat-demo">
+        <div class="chat-header">
+          <div class="chat-avatar">🤖</div>
+          <div class="chat-title">AI Assistant</div>
+        </div>
+        <div class="chat-messages">
+          <div class="message bot-message">
+            <div class="message-bubble">Hi there! How can I help you today?</div>
+          </div>
+          <div class="message user-message">
+            <div class="message-bubble">I'd like to learn about your pricing plans.</div>
+          </div>
+          <div class="message bot-message typing">
+            <div class="message-bubble">
+              <span class="typing-indicator">
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section id="features" class="features">
+    <div class="section-header" data-aos="fade-up">
+      <h2 class="section-title">Why Choose Our Platform?</h2>
+      <p class="section-subtitle">Everything you need to build powerful conversational experiences</p>
+    </div>
+    
+    <div class="features-grid">
+      <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
+        <div class="feature-icon">🚀</div>
+        <h3 class="feature-title">Quick Setup</h3>
+        <p class="feature-description">Get your chatbot up and running in minutes with our intuitive interface. No coding required.</p>
+      </div>
+      
+      <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+        <div class="feature-icon">🎨</div>
+        <h3 class="feature-title">Fully Customizable</h3>
+        <p class="feature-description">Design your bot's personality, appearance, and behavior to match your brand identity.</p>
+      </div>
+      
+      <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
+        <div class="feature-icon">🧠</div>
+        <h3 class="feature-title">AI-Powered</h3>
+        <p class="feature-description">Leverage advanced natural language processing to understand and respond to user queries intelligently.</p>
+      </div>
+      
+      <div class="feature-card" data-aos="fade-up" data-aos-delay="400">
+        <div class="feature-icon">📊</div>
+        <h3 class="feature-title">Analytics</h3>
+        <p class="feature-description">Track performance, user engagement, and conversation quality with detailed analytics.</p>
+      </div>
+      
+      <div class="feature-card" data-aos="fade-up" data-aos-delay="500">
+        <div class="feature-icon">🔌</div>
+        <h3 class="feature-title">Easy Integration</h3>
+        <p class="feature-description">Seamlessly integrate with your website, mobile app, or popular messaging platforms.</p>
+      </div>
+      
+      <div class="feature-card" data-aos="fade-up" data-aos-delay="600">
+        <div class="feature-icon">🛡️</div>
+        <h3 class="feature-title">Secure & Reliable</h3>
+        <p class="feature-description">Enterprise-grade security with 99.9% uptime guarantee for all your chatbot needs.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works Section -->
+  <section class="how-it-works">
+    <div class="section-header" data-aos="fade-up">
+      <h2 class="section-title">How It Works</h2>
+      <p class="section-subtitle">Create your perfect chatbot in three simple steps</p>
+    </div>
+    
+    <div class="steps">
+      <div class="step" data-aos="fade-right">
+        <div class="step-number">1</div>
+        <div class="step-content">
+          <h3 class="step-title">Design Your Bot</h3>
+          <p class="step-description">Choose your bot's personality, appearance, and capabilities using our intuitive builder.</p>
+        </div>
+        <div class="step-image">
+          <img src="/images/step1.svg" alt="Design your bot" class="step-img">
+        </div>
+      </div>
+      
+      <div class="step" data-aos="fade-left">
+        <div class="step-number">2</div>
+        <div class="step-content">
+          <h3 class="step-title">Train & Customize</h3>
+          <p class="step-description">Add knowledge, train responses, and fine-tune your bot's behavior to match your needs.</p>
+        </div>
+        <div class="step-image">
+          <img src="/images/step2.svg" alt="Train and customize" class="step-img">
+        </div>
+      </div>
+      
+      <div class="step" data-aos="fade-right">
+        <div class="step-number">3</div>
+        <div class="step-content">
+          <h3 class="step-title">Deploy & Monitor</h3>
+          <p class="step-description">Launch your bot on your preferred platform and track its performance with analytics.</p>
+        </div>
+        <div class="step-image">
+          <img src="/images/step3.svg" alt="Deploy and monitor" class="step-img">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Use Cases Section -->
+  <section class="use-cases">
+    <div class="section-header" data-aos="fade-up">
+      <h2 class="section-title">Popular Use Cases</h2>
+      <p class="section-subtitle">How businesses are leveraging our chatbots</p>
+    </div>
+    
+    <div class="use-cases-slider" id="useCasesSlider">
+      <div class="use-case-card" data-aos="fade-up">
+        <div class="use-case-icon">💼</div>
+        <h3 class="use-case-title">Customer Support</h3>
+        <p class="use-case-description">Provide 24/7 support, answer FAQs, and resolve common issues automatically.</p>
+        <div class="use-case-stats">
+          <div class="use-case-stat">
+            <span class="stat-value">70%</span>
+            <span class="stat-label">Reduction in support tickets</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="use-case-card" data-aos="fade-up" data-aos-delay="100">
+        <div class="use-case-icon">🛒</div>
+        <h3 class="use-case-title">E-commerce Sales</h3>
+        <p class="use-case-description">Guide customers through product selection and checkout process.</p>
+        <div class="use-case-stats">
+          <div class="use-case-stat">
+            <span class="stat-value">35%</span>
+            <span class="stat-label">Increase in conversion rate</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="use-case-card" data-aos="fade-up" data-aos-delay="200">
+        <div class="use-case-icon">📝</div>
+        <h3 class="use-case-title">Lead Generation</h3>
+        <p class="use-case-description">Qualify leads, collect contact information, and schedule appointments.</p>
+        <div class="use-case-stats">
+          <div class="use-case-stat">
+            <span class="stat-value">45%</span>
+            <span class="stat-label">More qualified leads</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="use-case-card" data-aos="fade-up" data-aos-delay="300">
+        <div class="use-case-icon">🏥</div>
+        <h3 class="use-case-title">Healthcare</h3>
+        <p class="use-case-description">Schedule appointments, provide health information, and follow up with patients.</p>
+        <div class="use-case-stats">
+          <div class="use-case-stat">
+            <span class="stat-value">60%</span>
+            <span class="stat-label">Reduction in no-shows</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="slider-controls">
+      <button class="slider-arrow prev" id="prevSlide">←</button>
+      <div class="slider-dots" id="sliderDots"></div>
+      <button class="slider-arrow next" id="nextSlide">→</button>
+    </div>
+  </section>
+
+  <!-- Testimonials Section -->
+  <section class="testimonials">
+    <div class="section-header" data-aos="fade-up">
+      <h2 class="section-title">What Our Users Say</h2>
+      <p class="section-subtitle">Join thousands of satisfied customers</p>
+    </div>
+    
+    <div class="testimonials-container" data-aos="fade-up">
+      <div class="testimonial">
+        <div class="testimonial-content">
+          <p class="testimonial-text">"We implemented the chatbot on our website and saw a 45% reduction in customer service inquiries within the first month. The setup was incredibly easy!"</p>
+        </div>
+        <div class="testimonial-author">
+          <img src="/images/testimonial1.jpg" alt="Sarah Johnson" class="author-image">
+          <div class="author-info">
+            <h4 class="author-name">Sarah Johnson</h4>
+            <p class="author-role">Customer Support Manager, TechCorp</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="testimonial">
+        <div class="testimonial-content">
+          <p class="testimonial-text">"The AI capabilities of this platform are impressive. Our chatbot can handle complex queries and learns from interactions, getting smarter every day."</p>
+        </div>
+        <div class="testimonial-author">
+          <img src="/images/testimonial2.jpg" alt="Michael Chen" class="author-image">
+          <div class="author-info">
+            <h4 class="author-name">Michael Chen</h4>
+            <p class="author-role">CTO, GrowthStartup</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="testimonial">
+        <div class="testimonial-content">
+          <p class="testimonial-text">"As a small business owner, I couldn't afford a 24/7 support team. This chatbot solution has been a game-changer for our customer satisfaction."</p>
+        </div>
+        <div class="testimonial-author">
+          <img src="/images/testimonial3.jpg" alt="Lisa Rodriguez" class="author-image">
+          <div class="author-info">
+            <h4 class="author-name">Lisa Rodriguez</h4>
+            <p class="author-role">Founder, Boutique Retail</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing Section -->
+  <section class="pricing" id="pricing">
+    <div class="section-header" data-aos="fade-up">
+      <h2 class="section-title">Simple, Transparent Pricing</h2>
+      <p class="section-subtitle">Choose the plan that fits your needs</p>
+    </div>
+    
+    <div class="pricing-plans">
+      <div class="pricing-plan" data-aos="fade-up" data-aos-delay="100">
+        <div class="plan-header">
+          <h3 class="plan-name">Free</h3>
+          <div class="plan-price">
+            <span class="price">$0</span>
+            <span class="period">/month</span>
+          </div>
+          <p class="plan-description">Perfect for beginners and small projects</p>
+        </div>
+        <ul class="plan-features">
+          <li class="feature-item">1 Chatbot</li>
+          <li class="feature-item">500 messages/month</li>
+          <li class="feature-item">Basic customization</li>
+          <li class="feature-item">Community support</li>
+          <li class="feature-item disabled">Advanced AI capabilities</li>
+          <li class="feature-item disabled">Analytics dashboard</li>
+        </ul>
+        <a href="/auth/register" class="btn btn-outline">Get Started</a>
+      </div>
+      
+      <div class="pricing-plan popular" data-aos="fade-up">
+        <div class="popular-tag">Most Popular</div>
+        <div class="plan-header">
+          <h3 class="plan-name">Pro</h3>
+          <div class="plan-price">
+            <span class="price">$29</span>
+            <span class="period">/month</span>
+          </div>
+          <p class="plan-description">For growing businesses and professionals</p>
+        </div>
+        <ul class="plan-features">
+          <li class="feature-item">5 Chatbots</li>
+          <li class="feature-item">10,000 messages/month</li>
+          <li class="feature-item">Advanced customization</li>
+          <li class="feature-item">Priority support</li>
+          <li class="feature-item">Advanced AI capabilities</li>
+          <li class="feature-item">Analytics dashboard</li>
+        </ul>
+        <a href="/auth/register" class="btn btn-primary">Get Started</a>
+      </div>
+      
+      <div class="pricing-plan" data-aos="fade-up" data-aos-delay="100">
+        <div class="plan-header">
+          <h3 class="plan-name">Enterprise</h3>
+          <div class="plan-price">
+            <span class="price">Custom</span>
+          </div>
+          <p class="plan-description">For large organizations with specific needs</p>
+        </div>
+        <ul class="plan-features">
+          <li class="feature-item">Unlimited Chatbots</li>
+          <li class="feature-item">Unlimited messages</li>
+          <li class="feature-item">Full customization</li>
+          <li class="feature-item">Dedicated support</li>
+          <li class="feature-item">Custom AI training</li>
+          <li class="feature-item">Advanced analytics & reporting</li>
+        </ul>
+        <a href="/contact" class="btn btn-outline">Contact Sales</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta">
+    <div class="cta-content" data-aos="fade-up">
+      <h2 class="cta-title">Ready to Transform Your Customer Experience?</h2>
+      <p class="cta-subtitle">Join thousands of businesses using our platform to create intelligent chatbots.</p>
+      <div class="cta-buttons">
+        <a href="/auth/register" class="btn btn-primary btn-large">Get Started for Free</a>
+        <a href="/demo" class="btn btn-secondary btn-large">Request Demo</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section class="faq">
+    <div class="section-header" data-aos="fade-up">
+      <h2 class="section-title">Frequently Asked Questions</h2>
+      <p class="section-subtitle">Find answers to common questions about our platform</p>
+    </div>
+    
+    <div class="faq-container">
+      <div class="faq-item" data-aos="fade-up">
+        <div class="faq-question" data-toggle="collapse">
+          <h3>Do I need coding knowledge to use this platform?</h3>
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">
+          <p>No, our platform is designed to be user-friendly and requires no coding knowledge. Our intuitive interface allows you to create, customize, and deploy chatbots using simple drag-and-drop tools and pre-built templates.</p>
+        </div>
+      </div>
+      
+      <div class="faq-item" data-aos="fade-up">
+        <div class="faq-question" data-toggle="collapse">
+          <h3>How long does it take to build a chatbot?</h3>
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">
+          <p>You can create a basic chatbot in as little as 5 minutes. More complex chatbots with custom workflows and integrations might take a few hours to set up. Our templates and guided setup process make it quick and easy to get started.</p>
+        </div>
+      </div>
+      
+      <div class="faq-item" data-aos="fade-up">
+        <div class="faq-question" data-toggle="collapse">
+          <h3>Can I integrate the chatbot with my existing systems?</h3>
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">
+          <p>Yes, our platform offers integrations with popular CRM systems, help desks, e-commerce platforms, and messaging services. We also provide API access for custom integrations with your proprietary systems.</p>
+        </div>
+      </div>
+      
+      <div class="faq-item" data-aos="fade-up">
+        <div class="faq-question" data-toggle="collapse">
+          <h3>How does the AI learn and improve over time?</h3>
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">
+          <p>Our AI uses machine learning to analyze conversations and improve responses over time. You can also manually review conversations and train the AI by providing better responses for specific questions, helping it learn faster.</p>
+        </div>
+      </div>
+      
+      <div class="faq-item" data-aos="fade-up">
+        <div class="faq-question" data-toggle="collapse">
+          <h3>Is my data secure on your platform?</h3>
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer">
+          <p>Absolutely. We take data security very seriously. All data is encrypted both in transit and at rest. We comply with GDPR, CCPA, and other privacy regulations. Our platform undergoes regular security audits and penetration testing.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr>
+  <footer>
+    <div class="footer-content">
+      <div class="footer-brand">
+        <h2>🤖 Chatbot Builder</h2>
+        <p>Create intelligent chatbots without coding</p>
+      </div>
+      
+      <div class="footer-links">
+        <div class="footer-column">
+          <h3>Product</h3>
+          <ul>
+            <li><a href="/features">Features</a></li>
+            <li><a href="/pricing">Pricing</a></li>
+            <li><a href="/templates">Templates</a></li>
+            <li><a href="/integrations">Integrations</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-column">
+          <h3>Resources</h3>
+          <ul>
+            <li><a href="/docs">Documentation</a></li>
+            <li><a href="/blog">Blog</a></li>
+            <li><a href="/tutorials">Tutorials</a></li>
+            <li><a href="/api">API</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-column">
+          <h3>Company</h3>
+          <ul>
+            <li><a href="/about">About Us</a></li>
+            <li><a href="/contact">Contact</a></li>
+            <li><a href="/careers">Careers</a></li>
+            <li><a href="/legal">Legal</a></li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="footer-social">
+        <a href="#" class="social-link">Twitter</a>
+        <a href="#" class="social-link">LinkedIn</a>
+        <a href="#" class="social-link">GitHub</a>
+        <a href="#" class="social-link">YouTube</a>
+      </div>
+    </div>
+    
+    <div class="footer-bottom">
+      <p>&copy; 2025 Shivam Verma | Chatbot Builder. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+  <script src="/js/home.js"></script>
+</body>
+</html>

@@ -1,21 +1,178 @@
-<%- include('partials/header') %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login - Chatbot Builder</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/login.css">
+</head>
+<body>
+  <header>
+    <nav class="navbar">
+      <a href="/" class="navbar-brand">
+        <h1>🤖 Chatbot Builder</h1>
+      </a>
+      
+      <ul class="navbar-nav">
+        <li><a href="/">Home</a></li>
+        <% if (isAuthenticated) { %>
+          <li><a href="/create-bot">Create Bot</a></li>
+          <li><a href="/explore">Explore</a></li>
+          <li><a href="/my-bots">My Bots</a></li>
+          <li><a href="/auth/logout">Logout</a></li>
+        <% } else { %>
+          <li><a href="/auth/login" class="active">Login</a></li>
+          <li><a href="/auth/register">Register</a></li>
+        <% } %>
+      </ul>
 
-<main>
-  <h2>Login</h2>
+      <div class="hamburger" id="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </nav>
 
-  <form action="/auth/login" method="POST">
-    <label for="email">Email:</label>
-    <input type="email" name="email" id="email" required><br>
+    <div class="mobile-menu" id="mobileMenu">
+      <ul>
+        <li><a href="/">Home</a></li>
+        <% if (isAuthenticated) { %>
+          <li><a href="/create-bot">Create Bot</a></li>
+          <li><a href="/explore">Explore</a></li>
+          <li><a href="/my-bots">My Bots</a></li>
+          <li><a href="/auth/logout">Logout</a></li>
+        <% } else { %>
+          <li><a href="/auth/login" class="active">Login</a></li>
+          <li><a href="/auth/register">Register</a></li>
+        <% } %>
+      </ul>
+    </div>
+  </header>
 
-    <label for="password">Password:</label>
-    <input type="password" name="password" id="password" required><br>
+  <main class="login-main">
+    <div class="login-container">
+      <div class="login-card">
+        <div class="login-header">
+          <div class="login-logo">
+            <div class="login-icon">🔐</div>
+          </div>
+          <h2 class="login-title">Welcome Back</h2>
+          <p class="login-subtitle">Sign in to your account to continue building amazing chatbots</p>
+        </div>
 
-    <button type="submit">Login</button>
-  </form>
+        <% if (typeof error !== 'undefined' && error) { %>
+          <div class="error-message">
+            <span class="error-icon">⚠️</span>
+            <span><%= error %></span>
+          </div>
+        <% } %>
 
+        <form action="/auth/login" method="POST" class="login-form" id="loginForm">
+          <div class="form-group">
+            <label for="email" class="form-label">Email Address</label>
+            <div class="input-container">
+              <input 
+                type="email" 
+                name="email" 
+                id="email" 
+                class="form-input" 
+                placeholder="Enter your email"
+                required
+                autocomplete="email"
+              >
+              <div class="input-icon">📧</div>
+            </div>
+          </div>
 
+          <div class="form-group">
+            <label for="password" class="form-label">Password</label>
+            <div class="input-container">
+              <input 
+                type="password" 
+                name="password" 
+                id="password" 
+                class="form-input" 
+                placeholder="Enter your password"
+                required
+                autocomplete="current-password"
+              >
+              <div class="input-icon">🔒</div>
+              <button type="button" class="password-toggle" id="passwordToggle">
+                <span class="toggle-icon">👁️</span>
+              </button>
+            </div>
+          </div>
 
-  <p>Don't have an account? <a href="/auth/register">Register here</a></p>
-</main>
+          <div class="form-options">
+            <label class="checkbox-container">
+              <input type="checkbox" name="remember" id="remember">
+              <span class="checkbox-custom"></span>
+              <span class="checkbox-text">Remember me</span>
+            </label>
+            <a href="/auth/forgot-password" class="forgot-link">Forgot password?</a>
+          </div>
 
-<%- include('partials/footer') %>
+          <button type="submit" class="login-button" id="loginButton">
+            <span class="button-text">Sign In</span>
+            <div class="button-glow"></div>
+          </button>
+        </form>
+
+        <div class="login-divider">
+          <span class="divider-text">or</span>
+        </div>
+
+        <div class="social-login">
+          <button class="social-btn google-btn" type="button">
+            <span class="social-icon">🔍</span>
+            <span>Continue with Google</span>
+          </button>
+          <button class="social-btn github-btn" type="button">
+            <span class="social-icon">🐙</span>
+            <span>Continue with GitHub</span>
+          </button>
+        </div>
+
+        <div class="login-footer">
+          <p class="signup-text">
+            Don't have an account? 
+            <a href="/auth/register" class="signup-link">Create one here</a>
+          </p>
+        </div>
+      </div>
+
+      <div class="login-features">
+        <div class="feature-item">
+          <div class="feature-icon">🚀</div>
+          <div class="feature-content">
+            <h3>Quick Setup</h3>
+            <p>Get your chatbot running in minutes</p>
+          </div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">🎨</div>
+          <div class="feature-content">
+            <h3>Customizable</h3>
+            <p>Design your bot's personality and appearance</p>
+          </div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">📊</div>
+          <div class="feature-content">
+            <h3>Analytics</h3>
+            <p>Track your bot's performance and engagement</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="/js/login.js"></script>
+
+  <hr>
+  <footer>
+    <p>&copy; 2025 Shivam Verma | Chatbot Builder</p>
+  </footer>
+</body>
+</html>

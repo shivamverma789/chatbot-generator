@@ -1,35 +1,123 @@
-<%- include('partials/header') %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Chatbot Builder</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/createBot.css">
+</head>
+<body>
+  <header>
+    <nav class="navbar">
+      <a href="/" class="navbar-brand">
+        <h1>🤖 Chatbot Builder</h1>
+      </a>
+      
+      <ul class="navbar-nav">
+        <li><a href="/">Home</a></li>
+        <% if (isAuthenticated) { %>
+          <li><a href="/create-bot" class="active">Create Bot</a></li>
+          <li><a href="/explore">Explore</a></li>
+          <li><a href="/my-bots">My Bots</a></li>
+          <li><a href="/auth/logout">Logout</a></li>
+        <% } else { %>
+          <li><a href="/auth/login">Login</a></li>
+          <li><a href="/auth/register">Register</a></li>
+        <% } %>
+      </ul>
 
-<h1>Create Your Chatbot</h1>
+      <div class="hamburger" id="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </nav>
 
-<form action="/create-bot" method="POST">
-    <label>Bot Name:</label>
-    <input type="text" name="name" required><br>
+    <div class="mobile-menu" id="mobileMenu">
+      <ul>
+        <li><a href="/">Home</a></li>
+        <% if (isAuthenticated) { %>
+          <li><a href="/create-bot" class="active">Create Bot</a></li>
+          <li><a href="/explore">Explore</a></li>
+          <li><a href="/my-bots">My Bots</a></li>
+          <li><a href="/auth/logout">Logout</a></li>
+        <% } else { %>
+          <li><a href="/auth/login">Login</a></li>
+          <li><a href="/auth/register">Register</a></li>
+        <% } %>
+      </ul>
+    </div>
+  </header>
 
-    <label>Type:</label>
-    <select name="type" required>
-        <option value="basic">Basic Chatbot</option>
-        <option value="image_analyzer">Chat + Image Analyzer</option>
-        <option value="document_bot">PDF/Doc QA Bot</option>
-    </select><br>
+  <div class="bot-creator-container">
+    <div class="bot-creator-card">
+      <div class="bot-creator-header">
+        <div class="bot-logo">
+          <div class="bot-icon">🤖</div>
+        </div>
+        <h1 class="bot-title">Create Your Chatbot</h1>
+        <p class="bot-subtitle">Design your perfect AI assistant</p>
+      </div>
 
-    <label>Tone/Personality:</label>
-    <input type="text" name="tone" placeholder="Friendly, formal, sarcastic..." required><br>
+      <form action="/create-bot" method="POST" id="botCreatorForm">
+        <div class="bot-form-group">
+          <label for="name" class="bot-label">Bot Name</label>
+          <input type="text" id="name" name="name" class="bot-input" required>
+        </div>
 
-    <label>Special Abilities:</label>
-    <input type="text" name="abilities" placeholder="Summarize, translate, recommend"><br>
+        <div class="bot-form-group">
+          <label for="type" class="bot-label">Type</label>
+          <select id="type" name="type" class="bot-select" required>
+            <option value="basic">Basic Chatbot</option>
+            <option value="image_analyzer">Chat + Image Analyzer</option>
+            <option value="document_bot">PDF/Doc QA Bot</option>
+          </select>
+        </div>
 
-    <label>Goal (optional):</label>
-    <input type="text" name="goal" placeholder="e.g. Help users choose movies"><br>
-    <label>
-    <input type="radio" name="visibility" value="private" checked> Private
-    </label>
-    <label>
-    <input type="radio" name="visibility" value="public"> Public
-    </label>
+        <div class="bot-form-group">
+          <label for="tone" class="bot-label">Tone/Personality</label>
+          <input type="text" id="tone" name="tone" class="bot-input" placeholder="Friendly, formal, sarcastic..." required>
+        </div>
 
-    <button type="submit">Preview Bot</button>
+        <div class="bot-form-group">
+          <label for="abilities" class="bot-label">Special Abilities</label>
+          <input type="text" id="abilities" name="abilities" class="bot-input" placeholder="Summarize, translate, recommend">
+        </div>
 
-</form>
+        <div class="bot-form-group">
+          <label for="goal" class="bot-label">Goal (optional)</label>
+          <input type="text" id="goal" name="goal" class="bot-input" placeholder="e.g. Help users choose movies">
+        </div>
 
-<%- include('partials/footer') %>
+        <div class="bot-form-group bot-radio-group">
+          <label class="bot-label">Visibility</label>
+          <div class="bot-radio-options">
+            <label class="bot-radio-container">
+              <input type="radio" name="visibility" value="private" checked>
+              <span class="bot-radio-custom"></span>
+              <span class="bot-radio-text">Private</span>
+            </label>
+            <label class="bot-radio-container">
+              <input type="radio" name="visibility" value="public">
+              <span class="bot-radio-custom"></span>
+              <span class="bot-radio-text">Public</span>
+            </label>
+          </div>
+        </div>
+
+        <button type="submit" class="bot-submit-button">
+          <span>Preview Bot</span>
+          <div class="button-glow-effect"></div>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <script src="/js/createBot.js"></script>
+  <hr>
+  <footer>
+    <p>&copy; 2025 Shivam Verma | Chatbot Builder</p>
+  </footer>
+</body>
+</html>

@@ -1,61 +1,100 @@
-<!-- this page will be render on the embeded page  -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-   
+    <title><%= bot.name %> - Chat Widget</title>
+    <link rel="stylesheet" href="/css/embed-chat.css">
 </head>
 <body>
-    
-<h2>Chat with <%= bot.name %></h2>
+    <div class="chat-widget" id="chatWidget" data-theme="dark">
+        <!-- Theme Toggle -->
+        <div class="theme-toggle">
+            <button id="themeToggle" class="theme-btn" title="Toggle Theme">
+                <span class="theme-icon">🌙</span>
+            </button>
+        </div>
 
-<div id="chat-box" style="border: 1px solid #ccc; padding: 10px; height: 300px; overflow-y: auto;">
-    <!-- Messages will appear here -->
-</div>
+        <!-- Chat Header -->
+        <div class="chat-header">
+            <div class="bot-info">
+                <% const avatarEmoji = {
+                    'Customer Support': '👩‍💼',
+                    'Sales': '💼',
+                    'Technical': '👨‍💻',
+                    'Educational': '👩‍🏫',
+                    'Entertainment': '🎭',
+                    'Personal Assistant': '🧠',
+                    'Health': '⚕️',
+                    'Financial': '💰'
+                }; %>
+                <div class="bot-avatar">
+                    <span class="avatar-emoji"><%= avatarEmoji[bot.type] || '🤖' %></span>
+                </div>
+                <div class="bot-details">
+                    <h3 class="bot-name"><%= bot.name %></h3>
+                    <span class="bot-status">
+                        <span class="status-dot"></span>
+                        Online
+                    </span>
+                </div>
+            </div>
+            <div class="chat-actions">
+                <button id="minimizeBtn" class="action-btn" title="Minimize">
+                    <span class="action-icon">−</span>
+                </button>
+            </div>
+        </div>
 
-<form id="chat-form">
-    <input type="text" id="user-input" placeholder="Type your message..." required>
-    <button type="submit">Send</button>
-</form>
+        <!-- Chat Messages -->
+        <div id="chat-messages" class="chat-messages">
+            <div class="welcome-message">
+                <div class="welcome-avatar">
+                    <span class="avatar-emoji"><%= avatarEmoji[bot.type] || '🤖' %></span>
+                </div>
+                <div class="welcome-text">
+                    <p>Hi! I'm <%= bot.name %>, your <%= bot.tone.toLowerCase() %> assistant. How can I help you today?</p>
+                </div>
+            </div>
+        </div>
 
-<script>
-    const form = document.getElementById('chat-form');
-    const input = document.getElementById('user-input');
-    const chatBox = document.getElementById('chat-box');
+        <!-- Typing Indicator -->
+        <div id="typingIndicator" class="typing-indicator">
+            <div class="typing-avatar">
+                <span class="avatar-emoji"><%= avatarEmoji[bot.type] || '🤖' %></span>
+            </div>
+            <div class="typing-bubble">
+                <div class="typing-dots">
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                </div>
+            </div>
+        </div>
 
-    form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const message = input.value;
-        if (!message) return;
+        <!-- Chat Input -->
+        <div class="chat-input-container">
+            <form id="chat-form" class="chat-form">
+                <div class="input-wrapper">
+                    <input 
+                        type="text" 
+                        id="user-input" 
+                        class="chat-input" 
+                        placeholder="Type your message..." 
+                        autocomplete="off"
+                        required
+                    >
+                    <button type="submit" class="send-btn" id="sendBtn">
+                        <span class="send-icon">↑</span>
+                    </button>
+                </div>
+            </form>
+            <div class="chat-footer">
+                <p class="powered-by">Powered by <strong>Chatbot Builder</strong></p>
+            </div>
+        </div>
+    </div>
 
-        // Display user message
-        const userMsg = document.createElement('div');
-        userMsg.innerHTML = `<strong>You:</strong> ${message}`;
-        chatBox.appendChild(userMsg);
-
-        // Send message to backend
-        const res = await fetch(`/bot/<%= bot._id %>/chat`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ message })
-        });
-
-        const data = await res.json();
-
-        // Display bot reply
-        const botMsg = document.createElement('div');
-        botMsg.innerHTML = `<strong>Bot:</strong> ${data.reply}`;
-        chatBox.appendChild(botMsg);
-
-        chatBox.scrollTop = chatBox.scrollHeight;
-        input.value = '';
-    });
-</script>
-
-
+    <script src="/js/embed-chat.js"></script>
 </body>
 </html>

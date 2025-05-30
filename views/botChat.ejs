@@ -1,50 +1,228 @@
-<%- include('partials/header') %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title><%= bot.name %> - Chatbot Builder</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/bot-chat.css">
+</head>
+<body>
+  <header>
+    <nav class="navbar">
+      <a href="/" class="navbar-brand">
+        <h1>🤖 Chatbot Builder</h1>
+      </a>
+      
+      <ul class="navbar-nav">
+        <li><a href="/">Home</a></li>
+        <% if (isAuthenticated) { %>
+          <li><a href="/create-bot">Create Bot</a></li>
+          <li><a href="/explore" class="active">Explore</a></li>
+          <li><a href="/my-bots">My Bots</a></li>
+          <li><a href="/auth/logout">Logout</a></li>
+        <% } else { %>
+          <li><a href="/auth/login">Login</a></li>
+          <li><a href="/auth/register">Register</a></li>
+        <% } %>
+      </ul>
 
-<h2>Chat with <%= bot.name %></h2>
+      <div class="hamburger" id="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </nav>
 
-<div id="chat-box" style="border: 1px solid #ccc; padding: 10px; height: 300px; overflow-y: auto;">
-    <!-- Messages will appear here -->
-</div>
+    <div class="mobile-menu" id="mobileMenu">
+      <ul>
+        <li><a href="/">Home</a></li>
+        <% if (isAuthenticated) { %>
+          <li><a href="/create-bot">Create Bot</a></li>
+          <li><a href="/explore" class="active">Explore</a></li>
+          <li><a href="/my-bots">My Bots</a></li>
+          <li><a href="/auth/logout">Logout</a></li>
+        <% } else { %>
+          <li><a href="/auth/login">Login</a></li>
+          <li><a href="/auth/register">Register</a></li>
+        <% } %>
+      </ul>
+    </div>
+  </header>
 
-<form id="chat-form">
-    <input type="text" id="user-input" placeholder="Type your message..." required>
-    <button type="submit">Send</button>
-</form>
+  <main class="chat-container">
+    <div class="chat-sidebar">
+      <div class="bot-profile">
+        <% const avatarEmoji = {
+          'Customer Support': '👩‍💼',
+          'Sales': '💼',
+          'Technical': '👨‍💻',
+          'Educational': '👩‍🏫',
+          'Entertainment': '🎭',
+          'Personal Assistant': '🧠',
+          'Health': '⚕️',
+          'Financial': '💰'
+        }; %>
+        <div class="bot-avatar">
+          <span class="avatar-emoji"><%= avatarEmoji[bot.type] || '🤖' %></span>
+        </div>
+        <div class="bot-info">
+          <h2 class="bot-name"><%= bot.name %></h2>
+          <div class="bot-status">
+            <span class="status-indicator"></span>
+            <span>Online</span>
+          </div>
+        </div>
+      </div>
 
-<script>
-    const form = document.getElementById('chat-form');
-    const input = document.getElementById('user-input');
-    const chatBox = document.getElementById('chat-box');
+      <div class="bot-details">
+        <div class="detail-item">
+          <span class="detail-label">Type</span>
+          <span class="detail-value"><%= bot.type %></span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Tone</span>
+          <span class="detail-value"><%= bot.tone %></span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Goal</span>
+          <span class="detail-value"><%= bot.goal || 'Assist users' %></span>
+        </div>
+      </div>
 
-    form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const message = input.value;
-        if (!message) return;
+      <div class="chat-actions">
+        <button id="clearChat" class="action-btn">
+          <span class="action-icon">🗑️</span>
+          <span>Clear Chat</span>
+        </button>
+        <button id="saveChat" class="action-btn">
+          <span class="action-icon">💾</span>
+          <span>Save Chat</span>
+        </button>
+        <button id="rateBot" class="action-btn">
+          <span class="action-icon">⭐</span>
+          <span>Rate Bot</span>
+        </button>
+      </div>
 
-        // Display user message
-        const userMsg = document.createElement('div');
-        userMsg.innerHTML = `<strong>You:</strong> ${message}`;
-        chatBox.appendChild(userMsg);
+      <div class="suggested-prompts">
+        <h3>Suggested Prompts</h3>
+        <div class="prompt-list">
+          <button class="prompt-btn">Tell me about yourself</button>
+          <button class="prompt-btn">What can you help me with?</button>
+          <button class="prompt-btn">How do I get started?</button>
+          <button class="prompt-btn">What are your capabilities?</button>
+        </div>
+      </div>
+    </div>
 
-        // Send message to backend
-        const res = await fetch(`/bot/<%= bot._id %>/chat`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ message })
-        });
+    <div class="chat-main">
+      <div class="chat-header">
+        <div class="chat-title">
+          <h2>Chat with <%= bot.name %></h2>
+          <p class="chat-subtitle"><%= bot.description || `A ${bot.tone.toLowerCase()} ${bot.type.toLowerCase()} chatbot` %></p>
+          
+        </div>
+        <div class="chat-controls">
+          <button id="toggleSidebar" class="control-btn" title="Toggle Sidebar">
+            <span class="control-icon">◀</span>
+          </button>
+          <button id="refreshChat" class="control-btn" title="Refresh Chat">
+            <span class="control-icon">🔄</span>
+          </button>
+          <button id="exportChat" class="control-btn" title="Export Chat">
+            <span class="control-icon">📤</span>
+          </button>
+        </div>
+      </div>
 
-        const data = await res.json();
+      <div id="chat-messages" class="chat-messages">
+        <div class="chat-welcome">
+          <div class="welcome-avatar">
+            <span class="avatar-emoji"><%= avatarEmoji[bot.type] || '🤖' %></span>
+          </div>
+          <div class="welcome-message">
+            <h3>Welcome to <%= bot.name %></h3>
+            <p>I'm your <%= bot.tone.toLowerCase() %> <%= bot.type.toLowerCase() %> assistant. How can I help you today?</p>
+            <div class="welcome-abilities">
+              <% if (bot.abilities && bot.abilities.length) { %>
+                <p>I can help with:</p>
+                <ul>
+                  <% const abilitiesList = typeof bot.abilities === 'string' ? bot.abilities.split(',') : bot.abilities; %>
+                  <% abilitiesList.slice(0, 3).forEach(ability => { %>
+                    <li><%= ability.trim() %></li>
+                  <% }); %>
+                  <% if (abilitiesList.length > 3) { %>
+                    <li>And more...</li>
+                  <% } %>
+                </ul>
+              <% } %>
+            </div>
+          </div>
+        </div>
+        <!-- Chat messages will appear here -->
+      </div>
 
-        // Display bot reply
-        const botMsg = document.createElement('div');
-        botMsg.innerHTML = `<strong>Bot:</strong> ${data.reply}`;
-        chatBox.appendChild(botMsg);
+      <div class="chat-input-container">
+        <form id="chat-form" class="chat-form">
+          <div class="input-wrapper">
+            <input 
+              type="text" 
+              id="user-input" 
+              class="chat-input" 
+              placeholder="Type your message..." 
+              autocomplete="off"
+              required
+            >
+            <!-- <div class="input-actions">
+              <button type="button" id="attachButton" class="input-action-btn" title="Attach File">
+                <span class="action-icon">📎</span>
+              </button>
+              <button type="button" id="emojiButton" class="input-action-btn" title="Add Emoji">
+                <span class="action-icon">😊</span>
+              </button>
+            </div> -->
+          </div>
+          <button type="submit" class="send-button">
+            <span class="send-icon">↑</span>
+          </button>
+        </form>
+        <div class="chat-footer">
+          <p class="chat-disclaimer">This is an AI assistant. Responses may not always be accurate.</p>
+          <div class="chat-status">
+            <span id="typingIndicator" class="typing-status">Bot is typing...</span>
+            <span id="messageStatus" class="message-status"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
 
-        chatBox.scrollTop = chatBox.scrollHeight;
-        input.value = '';
-    });
-</script>
+  <div id="ratingModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Rate Your Experience</h3>
+        <button class="close-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="rating-stars">
+          <span class="star" data-rating="1">★</span>
+          <span class="star" data-rating="2">★</span>
+          <span class="star" data-rating="3">★</span>
+          <span class="star" data-rating="4">★</span>
+          <span class="star" data-rating="5">★</span>
+        </div>
+        <textarea class="feedback-text" placeholder="Share your feedback (optional)"></textarea>
+        <button class="submit-rating">Submit Rating</button>
+      </div>
+    </div>
+  </div>
 
-<%- include('partials/footer') %>
+  <hr>
+  <footer>
+    <p>&copy; 2025 Shivam Verma | Chatbot Builder</p>
+  </footer>
+
+  <script src="/js/bot-chat.js"></script>
+</body>
+</html>

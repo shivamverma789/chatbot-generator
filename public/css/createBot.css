@@ -1,0 +1,394 @@
+/* Create Bot Page Specific Styles */
+:root {
+  --bot-bg-primary: #0f0e17;
+  --bot-bg-secondary: #1a1a2e;
+  --bot-text-primary: #fffffe;
+  --bot-text-secondary: #a7a9be;
+  --bot-accent: #7f5af0;
+  --bot-accent-hover: #6b4dd1;
+  --bot-error: #ef4565;
+  --bot-success: #2cb67d;
+  --bot-border-radius: 12px;
+  --bot-card-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  --bot-transition: all 0.3s ease;
+}
+
+/* Container */
+.bot-creator-container {
+  width: 100%;
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+/* Card with glassmorphism effect */
+.bot-creator-card {
+  background: rgba(26, 26, 46, 0.25);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: var(--bot-border-radius);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: var(--bot-card-shadow);
+  padding: 2.5rem;
+  transition: var(--bot-transition);
+  position: relative;
+  overflow: hidden;
+}
+
+.bot-creator-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(127, 90, 240, 0.5), transparent);
+}
+
+.bot-creator-card:hover {
+  box-shadow: 0 12px 48px 0 rgba(0, 0, 0, 0.5);
+  transform: translateY(-5px);
+  border-color: rgba(127, 90, 240, 0.2);
+}
+
+/* Header */
+.bot-creator-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.bot-logo {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.bot-icon {
+  font-size: 3.5rem;
+  background: linear-gradient(135deg, var(--bot-accent) 0%, var(--bot-success) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: bot-float 3s ease-in-out infinite;
+  filter: drop-shadow(0 4px 8px rgba(127, 90, 240, 0.3));
+}
+
+@keyframes bot-float {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-10px) rotate(5deg);
+  }
+}
+
+.bot-title {
+  font-size: 2.4rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(135deg, #fffffe 0%, #a7a9be 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.bot-subtitle {
+  color: var(--bot-text-secondary);
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  opacity: 0.9;
+}
+
+/* Form Elements */
+.bot-form-group {
+  margin-bottom: 1.8rem;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: var(--bot-transition);
+}
+
+.bot-form-group.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.bot-label {
+  display: block;
+  margin-bottom: 0.6rem;
+  font-weight: 600;
+  color: var(--bot-text-secondary);
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.bot-input,
+.bot-select {
+  width: 100%;
+  padding: 0.9rem 1.2rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--bot-border-radius);
+  color: var(--bot-text-primary);
+  font-size: 1rem;
+  transition: var(--bot-transition);
+  position: relative;
+}
+
+.bot-input:focus,
+.bot-select:focus {
+  outline: none;
+  border-color: var(--bot-accent);
+  box-shadow: 0 0 0 3px rgba(127, 90, 240, 0.15);
+  background: rgba(255, 255, 255, 0.08);
+  transform: translateY(-2px);
+}
+
+.bot-input::placeholder {
+  color: rgba(167, 169, 190, 0.6);
+  font-style: italic;
+}
+
+.bot-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23a7a9be' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 1.2rem;
+  cursor: pointer;
+}
+
+.bot-select:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+/* Custom Radio Buttons */
+.bot-radio-group {
+  margin-bottom: 2.5rem;
+}
+
+.bot-radio-options {
+  display: flex;
+  gap: 2rem;
+  margin-top: 0.8rem;
+}
+
+.bot-radio-container {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-weight: 500;
+  color: var(--bot-text-primary);
+  padding: 0.5rem;
+  border-radius: var(--bot-border-radius);
+  transition: var(--bot-transition);
+}
+
+.bot-radio-container:hover {
+  background: rgba(127, 90, 240, 0.1);
+}
+
+.bot-radio-container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  width: 0;
+  height: 0;
+}
+
+.bot-radio-custom {
+  position: relative;
+  display: inline-block;
+  width: 22px;
+  height: 22px;
+  margin-right: 12px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  transition: var(--bot-transition);
+}
+
+.bot-radio-container:hover .bot-radio-custom {
+  border-color: var(--bot-accent);
+  box-shadow: 0 0 0 2px rgba(127, 90, 240, 0.2);
+}
+
+.bot-radio-container input:checked ~ .bot-radio-custom {
+  background-color: transparent;
+  border-color: var(--bot-accent);
+  box-shadow: 0 0 0 2px rgba(127, 90, 240, 0.3);
+}
+
+.bot-radio-container input:checked ~ .bot-radio-custom:after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--bot-accent);
+  animation: radio-pop 0.3s ease;
+}
+
+@keyframes radio-pop {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.2);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+.bot-radio-text {
+  font-size: 1rem;
+  user-select: none;
+}
+
+/* Submit Button */
+.bot-submit-button {
+  position: relative;
+  width: 100%;
+  padding: 1rem 2rem;
+  background: linear-gradient(135deg, var(--bot-accent) 0%, var(--bot-success) 100%);
+  color: white;
+  border: none;
+  border-radius: var(--bot-border-radius);
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  overflow: hidden;
+  transition: var(--bot-transition);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 15px rgba(127, 90, 240, 0.4);
+}
+
+.bot-submit-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(127, 90, 240, 0.6);
+}
+
+.bot-submit-button:active {
+  transform: translateY(-1px);
+}
+
+.bot-submit-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.button-glow-effect {
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0) 70%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.bot-submit-button:hover .button-glow-effect {
+  opacity: 1;
+  animation: bot-glow 2s infinite;
+}
+
+@keyframes bot-glow {
+  0% {
+    transform: translate(-50%, -50%) scale(0.8) rotate(0deg);
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.5) rotate(180deg);
+    opacity: 0;
+  }
+}
+
+/* Error Messages */
+.bot-error-message {
+  color: var(--bot-error);
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+  background: rgba(239, 69, 101, 0.1);
+  border-radius: 6px;
+  border-left: 3px solid var(--bot-error);
+  animation: error-shake 0.5s ease;
+}
+
+@keyframes error-shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+/* Success Messages */
+.bot-success-message {
+  color: var(--bot-success);
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+  background: rgba(44, 182, 125, 0.1);
+  border-radius: 6px;
+  border-left: 3px solid var(--bot-success);
+}
+
+/* Loading State */
+.bot-submit-button.loading {
+  background: linear-gradient(135deg, #666 0%, #888 100%);
+  cursor: not-allowed;
+}
+
+.bot-submit-button.loading span {
+  opacity: 0.7;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .bot-creator-container {
+    margin: 1rem auto;
+  }
+  
+  .bot-creator-card {
+    padding: 1.5rem;
+  }
+
+  .bot-title {
+    font-size: 2rem;
+  }
+
+  .bot-icon {
+    font-size: 2.5rem;
+  }
+
+  .bot-radio-options {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .bot-submit-button {
+    font-size: 1rem;
+    padding: 0.9rem 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .bot-creator-card {
+    padding: 1rem;
+  }
+  
+  .bot-title {
+    font-size: 1.8rem;
+  }
+  
+  .bot-subtitle {
+    font-size: 1rem;
+  }
+}

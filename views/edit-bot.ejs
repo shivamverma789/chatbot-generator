@@ -1,33 +1,421 @@
-<%- include('partials/header') %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Edit Bot: <%= bot.name %> - Chatbot Builder</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/edit-bot.css">
+</head>
+<body>
+  <header>
+    <nav class="navbar">
+      <a href="/" class="navbar-brand">
+        <h1>🤖 Chatbot Builder</h1>
+      </a>
+      
+      <ul class="navbar-nav">
+        <li><a href="/">Home</a></li>
+        <% if (isAuthenticated) { %>
+          <li><a href="/create-bot">Create Bot</a></li>
+          <li><a href="/explore">Explore</a></li>
+          <li><a href="/my-bots">My Bots</a></li>
+          <li><a href="/auth/logout">Logout</a></li>
+        <% } else { %>
+          <li><a href="/auth/login">Login</a></li>
+          <li><a href="/auth/register">Register</a></li>
+        <% } %>
+      </ul>
 
-<h2>Edit Bot: <%= bot.name %></h2>
+      <div class="hamburger" id="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </nav>
 
-<form action="/bot/<%= bot._id %>/edit" method="POST">
-  <label for="name">Name:</label><br>
-  <input type="text" id="name" name="name" value="<%= bot.name %>" required><br><br>
+    <div class="mobile-menu" id="mobileMenu">
+      <ul>
+        <li><a href="/">Home</a></li>
+        <% if (isAuthenticated) { %>
+          <li><a href="/create-bot">Create Bot</a></li>
+          <li><a href="/explore">Explore</a></li>
+          <li><a href="/my-bots">My Bots</a></li>
+          <li><a href="/auth/logout">Logout</a></li>
+        <% } else { %>
+          <li><a href="/auth/login">Login</a></li>
+          <li><a href="/auth/register">Register</a></li>
+        <% } %>
+      </ul>
+    </div>
+  </header>
 
-  <label for="type">Type:</label><br>
-  <input type="text" id="type" name="type" value="<%= bot.type %>" required><br><br>
+  <main class="edit-main">
+    <div class="edit-container">
+      <!-- Header Section -->
+      <div class="edit-header">
+        <div class="header-content">
+          <div class="header-info">
+            <div class="bot-avatar">
+              <% const avatarEmoji = {
+                'Customer Support': '👩‍💼',
+                'Sales': '💼',
+                'Technical': '👨‍💻',
+                'Educational': '👩‍🏫',
+                'Entertainment': '🎭',
+                'Personal Assistant': '🧠',
+                'Health': '⚕️',
+                'Financial': '💰'
+              }; %>
+              <span class="avatar-emoji"><%= avatarEmoji[bot.type] || '🤖' %></span>
+            </div>
+            <div class="header-text">
+              <h1 class="page-title">Edit Chatbot</h1>
+              <p class="page-subtitle">Customize your bot's personality and capabilities</p>
+            </div>
+          </div>
+          <div class="header-actions">
+            <a href="/my-bots" class="back-btn">
+              <span class="back-icon">←</span>
+              <span>Back to My Bots</span>
+            </a>
+          </div>
+        </div>
+      </div>
 
-  <label for="tone">Tone:</label><br>
-  <input type="text" id="tone" name="tone" value="<%= bot.tone %>" required><br><br>
+      <!-- Success/Error Messages -->
+      <% if (typeof success !== 'undefined' && success) { %>
+        <div class="alert alert-success" id="successAlert">
+          <span class="alert-icon">✅</span>
+          <span><%= success %></span>
+          <button class="alert-close" onclick="closeAlert('successAlert')">×</button>
+        </div>
+      <% } %>
 
-  <label for="abilities">Abilities:</label><br>
-  <textarea id="abilities" name="abilities" rows="4" required><%= bot.abilities %></textarea><br><br>
+      <% if (typeof error !== 'undefined' && error) { %>
+        <div class="alert alert-error" id="errorAlert">
+          <span class="alert-icon">⚠️</span>
+          <span><%= error %></span>
+          <button class="alert-close" onclick="closeAlert('errorAlert')">×</button>
+        </div>
+      <% } %>
 
-  <label for="goal">Goal:</label><br>
-  <textarea id="goal" name="goal" rows="4"><%= bot.goal %></textarea><br><br>
+      <div class="edit-content">
+        <!-- Edit Form -->
+        <div class="edit-form-section">
+          <div class="form-card">
+            <div class="form-header">
+              <h2 class="form-title">Bot Configuration</h2>
+              <p class="form-subtitle">Update your chatbot's settings and behavior</p>
+            </div>
 
-  <label>Visibility:</label><br>
-  <input type="radio" id="public" name="visibility" value="public" <%= bot.visibility === 'public' ? 'checked' : '' %>>
-  <label for="public">Public</label><br>
-  <input type="radio" id="private" name="visibility" value="private" <%= bot.visibility === 'private' ? 'checked' : '' %>>
-  <label for="private">Private</label><br><br>
- 
+            <form action="/bot/<%= bot._id %>/edit" method="POST" class="edit-form" id="editForm">
+              <!-- Basic Information -->
+              <div class="form-section">
+                <h3 class="section-title">
+                  <span class="section-icon">📝</span>
+                  Basic Information
+                </h3>
+                
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="name" class="form-label">Bot Name</label>
+                    <div class="input-container">
+                      <input 
+                        type="text" 
+                        id="name" 
+                        name="name" 
+                        class="form-input" 
+                        value="<%= bot.name %>" 
+                        placeholder="Enter bot name"
+                        required
+                        maxlength="50"
+                      >
+                      <div class="input-icon">🤖</div>
+                    </div>
+                    <div class="input-help">Choose a memorable name for your chatbot</div>
+                  </div>
 
-  <button type="submit">Update Bot</button>
-</form>
+                  <div class="form-group">
+                    <label for="type" class="form-label">Bot Type</label>
+                    <div class="input-container">
+                      <select id="type" name="type" class="form-select" required>
+                        <option value="">Select bot type</option>
+                        <option value="Customer Support" <%= bot.type === 'Customer Support' ? 'selected' : '' %>>👩‍💼 Customer Support</option>
+                        <option value="Sales" <%= bot.type === 'Sales' ? 'selected' : '' %>>💼 Sales</option>
+                        <option value="Technical" <%= bot.type === 'Technical' ? 'selected' : '' %>>👨‍💻 Technical</option>
+                        <option value="Educational" <%= bot.type === 'Educational' ? 'selected' : '' %>>👩‍🏫 Educational</option>
+                        <option value="Entertainment" <%= bot.type === 'Entertainment' ? 'selected' : '' %>>🎭 Entertainment</option>
+                        <option value="Personal Assistant" <%= bot.type === 'Personal Assistant' ? 'selected' : '' %>>🧠 Personal Assistant</option>
+                        <option value="Health" <%= bot.type === 'Health' ? 'selected' : '' %>>⚕️ Health</option>
+                        <option value="Financial" <%= bot.type === 'Financial' ? 'selected' : '' %>>💰 Financial</option>
+                      </select>
+                      <div class="select-arrow">▼</div>
+                    </div>
+                    <div class="input-help">Select the primary purpose of your bot</div>
+                  </div>
+                </div>
 
-<a href="/my-bots">Back to My Bots</a>
+                <div class="form-group">
+                  <label for="tone" class="form-label">Conversation Tone</label>
+                  <div class="input-container">
+                    <select id="tone" name="tone" class="form-select" required>
+                      <option value="">Select tone</option>
+                      <option value="Professional" <%= bot.tone === 'Professional' ? 'selected' : '' %>>Professional</option>
+                      <option value="Friendly" <%= bot.tone === 'Friendly' ? 'selected' : '' %>>Friendly</option>
+                      <option value="Casual" <%= bot.tone === 'Casual' ? 'selected' : '' %>>Casual</option>
+                      <option value="Formal" <%= bot.tone === 'Formal' ? 'selected' : '' %>>Formal</option>
+                      <option value="Humorous" <%= bot.tone === 'Humorous' ? 'selected' : '' %>>Humorous</option>
+                      <option value="Empathetic" <%= bot.tone === 'Empathetic' ? 'selected' : '' %>>Empathetic</option>
+                    </select>
+                    <div class="select-arrow">▼</div>
+                  </div>
+                  <div class="input-help">How should your bot communicate with users?</div>
+                </div>
+              </div>
 
-<%- include('partials/footer') %>
+              <!-- Capabilities -->
+              <div class="form-section">
+                <h3 class="section-title">
+                  <span class="section-icon">⚡</span>
+                  Capabilities & Behavior
+                </h3>
+                
+                <div class="form-group">
+                  <label for="abilities" class="form-label">Bot Abilities</label>
+                  <div class="textarea-container">
+                    <textarea 
+                      id="abilities" 
+                      name="abilities" 
+                      class="form-textarea" 
+                      placeholder="Describe what your bot can do..."
+                      required
+                      rows="4"
+                      maxlength="500"
+                    ><%= bot.abilities %></textarea>
+                    <div class="textarea-counter">
+                      <span id="abilitiesCounter">0</span>/500
+                    </div>
+                  </div>
+                  <div class="input-help">List the main capabilities and skills of your bot</div>
+                </div>
+
+                <div class="form-group">
+                  <label for="goal" class="form-label">Primary Goal</label>
+                  <div class="textarea-container">
+                    <textarea 
+                      id="goal" 
+                      name="goal" 
+                      class="form-textarea" 
+                      placeholder="What is the main objective of your bot?"
+                      rows="3"
+                      maxlength="300"
+                    ><%= bot.goal %></textarea>
+                    <div class="textarea-counter">
+                      <span id="goalCounter">0</span>/300
+                    </div>
+                  </div>
+                  <div class="input-help">Define the primary purpose and goal of your chatbot</div>
+                </div>
+              </div>
+
+              <!-- Privacy Settings -->
+              <div class="form-section">
+                <h3 class="section-title">
+                  <span class="section-icon">🔒</span>
+                  Privacy & Visibility
+                </h3>
+                
+                <div class="form-group">
+                  <label class="form-label">Bot Visibility</label>
+                  <div class="radio-group">
+                    <label class="radio-option">
+                      <input 
+                        type="radio" 
+                        name="visibility" 
+                        value="public" 
+                        <%= bot.visibility === 'public' ? 'checked' : '' %>
+                      >
+                      <span class="radio-custom"></span>
+                      <div class="radio-content">
+                        <span class="radio-title">🌍 Public</span>
+                        <span class="radio-description">Anyone can discover and use your bot</span>
+                      </div>
+                    </label>
+                    
+                    <label class="radio-option">
+                      <input 
+                        type="radio" 
+                        name="visibility" 
+                        value="private" 
+                        <%= bot.visibility === 'private' ? 'checked' : '' %>
+                      >
+                      <span class="radio-custom"></span>
+                      <div class="radio-content">
+                        <span class="radio-title">🔒 Private</span>
+                        <span class="radio-description">Only you can access and use your bot</span>
+                      </div>
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Form Actions -->
+              <div class="form-actions">
+                <button type="button" class="btn btn-secondary" id="cancelBtn">
+                  <span class="btn-icon">✕</span>
+                  <span>Cancel</span>
+                </button>
+                
+                <button type="button" class="btn btn-outline" id="previewBtn">
+                  <span class="btn-icon">👁️</span>
+                  <span>Preview</span>
+                </button>
+                
+                <button type="submit" class="btn btn-primary" id="saveBtn">
+                  <span class="btn-icon">💾</span>
+                  <span>Save Changes</span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Preview Section -->
+        <div class="preview-section">
+          <div class="preview-card">
+            <div class="preview-header">
+              <h3 class="preview-title">Live Preview</h3>
+              <div class="preview-status">
+                <span class="status-dot"></span>
+                <span>Real-time</span>
+              </div>
+            </div>
+            
+            <div class="bot-preview" id="botPreview">
+              <div class="preview-bot-header">
+                <div class="preview-bot-avatar">
+                  <span class="preview-avatar-emoji" id="previewAvatar">🤖</span>
+                </div>
+                <div class="preview-bot-info">
+                  <h4 class="preview-bot-name" id="previewName"><%= bot.name %></h4>
+                  <p class="preview-bot-type" id="previewType"><%= bot.type %></p>
+                  <span class="preview-bot-tone" id="previewTone"><%= bot.tone %> tone</span>
+                </div>
+              </div>
+              
+              <div class="preview-bot-details">
+                <div class="preview-section-item">
+                  <h5>Abilities</h5>
+                  <p id="previewAbilities"><%= bot.abilities %></p>
+                </div>
+                
+                <div class="preview-section-item">
+                  <h5>Goal</h5>
+                  <p id="previewGoal"><%= bot.goal || 'No goal specified' %></p>
+                </div>
+                
+                <div class="preview-section-item">
+                  <h5>Visibility</h5>
+                  <span class="visibility-badge" id="previewVisibility">
+                    <span class="visibility-icon"><%= bot.visibility === 'public' ? '🌍' : '🔒' %></span>
+                    <span class="visibility-text"><%= bot.visibility.charAt(0).toUpperCase() + bot.visibility.slice(1) %></span>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Actions -->
+          <div class="quick-actions">
+            <h4 class="actions-title">Quick Actions</h4>
+            <div class="action-buttons">
+              <a href="/bot/<%= bot._id %>/chat" class="action-btn">
+                <span class="action-icon">💬</span>
+                <span>Test Chat</span>
+              </a>
+              
+              <a href="/bot/<%= bot._id %>/analytics" class="action-btn">
+                <span class="action-icon">📊</span>
+                <span>Analytics</span>
+              </a>
+              
+              <button class="action-btn" id="shareBtn">
+                <span class="action-icon">🔗</span>
+                <span>Share</span>
+              </button>
+              
+              <button class="action-btn danger" id="deleteBtn">
+                <span class="action-icon">🗑️</span>
+                <span>Delete</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Delete Confirmation Modal -->
+  <div class="modal" id="deleteModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Delete Chatbot</h3>
+        <button class="modal-close" id="closeDeleteModal">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="delete-warning">
+          <div class="warning-icon">⚠️</div>
+          <div class="warning-text">
+            <p>Are you sure you want to delete "<strong><%= bot.name %></strong>"?</p>
+            <p>This action cannot be undone. All chat history and analytics will be permanently lost.</p>
+          </div>
+        </div>
+        <div class="confirmation-input">
+          <label for="confirmDelete">Type "<strong>DELETE</strong>" to confirm:</label>
+          <input type="text" id="confirmDelete" placeholder="Type DELETE here">
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" id="cancelDelete">Cancel</button>
+        <button class="btn btn-danger" id="confirmDeleteBtn" disabled>Delete Forever</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Share Modal -->
+  <div class="modal" id="shareModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Share Your Chatbot</h3>
+        <button class="modal-close" id="closeShareModal">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="share-options">
+          <div class="share-option">
+            <label>Direct Link</label>
+            <div class="copy-container">
+              <input type="text" readonly value="<%= `${process.env.BASE_URL || 'http://localhost:3000'}/bot/${bot._id}/chat` %>" id="directLink">
+              <button class="copy-btn" data-copy="directLink">Copy</button>
+            </div>
+          </div>
+          
+          <div class="share-option">
+            <label>Embed Code</label>
+            <div class="copy-container">
+              <textarea readonly id="embedCode"><iframe src="<%= `${process.env.BASE_URL || 'http://localhost:3000'}/bot/${bot._id}/embed` %>" width="400" height="600" frameborder="0"></iframe></textarea>
+              <button class="copy-btn" data-copy="embedCode">Copy</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/edit-bot.js"></script>
+  
+  <footer>
+    <p>&copy; 2025 Shivam Verma | Chatbot Builder</p>
+  </footer>
+</body>
+</html>

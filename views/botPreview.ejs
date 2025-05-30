@@ -1,16 +1,254 @@
-<%- include('partials/header') %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title><%= bot.name %> - Chatbot Builder</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/bot-preview.css">
+</head>
+<body>
+  <header>
+    <nav class="navbar">
+      <a href="/" class="navbar-brand">
+        <h1>🤖 Chatbot Builder</h1>
+      </a>
+      
+      <ul class="navbar-nav">
+        <li><a href="/">Home</a></li>
+        <% if (isAuthenticated) { %>
+          <li><a href="/create-bot">Create Bot</a></li>
+          <li><a href="/explore" class="active">Explore</a></li>
+          <li><a href="/my-bots">My Bots</a></li>
+          <li><a href="/auth/logout">Logout</a></li>
+        <% } else { %>
+          <li><a href="/auth/login">Login</a></li>
+          <li><a href="/auth/register">Register</a></li>
+        <% } %>
+      </ul>
 
-<h2>Bot Preview</h2>
-<p><strong>Name:</strong> <%= bot.name %></p>
-<p><strong>Type:</strong> <%= bot.type %></p>
-<p><strong>Tone:</strong> <%= bot.tone %></p>
-<p><strong>Abilities:</strong> <%= bot.abilities %></p>
-<p><strong>Goal:</strong> <%= bot.goal || 'N/A' %></p>
+      <div class="hamburger" id="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </nav>
 
-<!-- Chat Button -->
-<a href="/bot/<%= bot._id %>/chat" class="btn">Chat with <%= bot.name %></a>
+    <div class="mobile-menu" id="mobileMenu">
+      <ul>
+        <li><a href="/">Home</a></li>
+        <% if (isAuthenticated) { %>
+          <li><a href="/create-bot">Create Bot</a></li>
+          <li><a href="/explore" class="active">Explore</a></li>
+          <li><a href="/my-bots">My Bots</a></li>
+          <li><a href="/auth/logout">Logout</a></li>
+        <% } else { %>
+          <li><a href="/auth/login">Login</a></li>
+          <li><a href="/auth/register">Register</a></li>
+        <% } %>
+      </ul>
+    </div>
+  </header>
 
-<br><br>
-<a href="/">Back to Home</a>
+  <main class="bot-preview-container">
+    <div class="bot-preview-header">
+      <div class="back-link">
+        <a href="/explore"><span class="back-icon">←</span> Back to Explore</a>
+      </div>
+      <h1 class="bot-name"><%= bot.name %></h1>
+      <div class="bot-meta">
+        <span class="bot-type"><%= bot.type %></span>
+        <span class="bot-tone"><%= bot.tone %></span>
+        <% if (bot.createdBy) { %>
+          <span class="bot-creator">Created by <%= bot.createdBy %></span>
+        <% } %>
+      </div>
+    </div>
 
-<%- include('partials/footer') %>
+    <div class="bot-preview-content">
+      <div class="bot-info-card">
+        <div class="bot-avatar">
+          <% const avatarEmoji = {
+            'Customer Support': '👩‍💼',
+            'Sales': '💼',
+            'Technical': '👨‍💻',
+            'Educational': '👩‍🏫',
+            'Entertainment': '🎭',
+            'Personal Assistant': '🧠',
+            'Health': '⚕️',
+            'Financial': '💰'
+          }; %>
+          <div class="avatar-emoji"><%= avatarEmoji[bot.type] || '🤖' %></div>
+        </div>
+        
+        <div class="bot-details">
+          <div class="detail-section">
+            <h3>About this Bot</h3>
+            <p class="bot-description"><%= bot.description || `A ${bot.tone.toLowerCase()} ${bot.type.toLowerCase()} chatbot designed to ${bot.goal || 'assist users'}.` %></p>
+          </div>
+          
+          <div class="detail-section">
+            <h3>Abilities</h3>
+            <div class="abilities-tags">
+              <% if (bot.abilities && bot.abilities.length) { %>
+                <% const abilitiesList = typeof bot.abilities === 'string' ? bot.abilities.split(',') : bot.abilities; %>
+                <% abilitiesList.forEach(ability => { %>
+                  <span class="ability-tag"><%= ability.trim() %></span>
+                <% }); %>
+              <% } else { %>
+                <span class="ability-tag">General Assistance</span>
+              <% } %>
+            </div>
+          </div>
+          
+          <div class="detail-section">
+            <h3>Personality</h3>
+            <div class="personality-traits">
+              <div class="trait">
+                <span class="trait-label">Tone:</span>
+                <span class="trait-value"><%= bot.tone %></span>
+              </div>
+              <div class="trait">
+                <span class="trait-label">Goal:</span>
+                <span class="trait-value"><%= bot.goal || 'Assist users' %></span>
+              </div>
+              <div class="trait">
+                <span class="trait-label">Knowledge:</span>
+                <span class="trait-value"><%= bot.knowledge || bot.type %> expertise</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="detail-section">
+            <h3>Stats</h3>
+            <div class="bot-stats">
+              <div class="stat">
+                <span class="stat-value">4.8</span>
+                <span class="stat-label">Rating</span>
+              </div>
+              <div class="stat">
+                <span class="stat-value">1.2k</span>
+                <span class="stat-label">Chats</span>
+              </div>
+              <div class="stat">
+                <span class="stat-value">98%</span>
+                <span class="stat-label">Accuracy</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="action-buttons">
+            <a href="/bot/<%= bot._id %>/chat" class="btn btn-primary">
+              <span class="btn-icon">💬</span>
+              Chat with <%= bot.name %>
+            </a>
+            <% if (isAuthenticated) { %>
+              <button class="btn btn-secondary" id="cloneBot">
+                <span class="btn-icon">🔄</span>
+                Clone Bot
+              </button>
+            <% } %>
+          </div>
+        </div>
+      </div>
+      
+      <div class="chat-preview-card">
+        <div class="chat-header">
+          <div class="chat-avatar">
+            <div class="avatar-emoji"><%= avatarEmoji[bot.type] || '🤖' %></div>
+          </div>
+          <div class="chat-title">
+            <h3><%= bot.name %></h3>
+            <span class="status-indicator">Online</span>
+          </div>
+        </div>
+        
+        <div class="chat-messages" id="chatMessages">
+          <div class="message bot-message">
+            <div class="message-bubble">
+              <p>Hello! I'm <%= bot.name %>, your <%= bot.tone.toLowerCase() %> <%= bot.type.toLowerCase() %> assistant. How can I help you today?</p>
+            </div>
+            <div class="message-time">Just now</div>
+          </div>
+          
+          <div class="message user-message">
+            <div class="message-bubble">
+              <p>Can you tell me more about what you can do?</p>
+            </div>
+            <div class="message-time">Just now</div>
+          </div>
+          
+          <div class="message bot-message typing">
+            <div class="message-bubble">
+              <div class="typing-indicator">
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="chat-input">
+          <input type="text" placeholder="Type a message to preview..." disabled>
+          <button class="send-button" disabled>
+            <span>Send</span>
+            <span class="send-icon">→</span>
+          </button>
+        </div>
+        
+        <div class="preview-note">
+          <p>This is a preview. Click "Chat with <%= bot.name %>" for the full experience.</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="bot-preview-footer">
+      <div class="share-section">
+        <h3>Share this Bot</h3>
+        <div class="share-buttons">
+          <button class="share-btn twitter">Twitter</button>
+          <button class="share-btn facebook">Facebook</button>
+          <button class="share-btn copy-link" id="copyLink">Copy Link</button>
+        </div>
+      </div>
+      
+      <div class="similar-bots">
+        <h3>Similar Bots</h3>
+        <div class="similar-bots-grid">
+          <div class="similar-bot-card">
+            <div class="similar-bot-avatar">🧑‍⚕️</div>
+            <div class="similar-bot-info">
+              <h4>HealthHelper</h4>
+              <p>Medical assistance bot</p>
+            </div>
+          </div>
+          
+          <div class="similar-bot-card">
+            <div class="similar-bot-avatar">👨‍💼</div>
+            <div class="similar-bot-info">
+              <h4>SalesGuru</h4>
+              <p>Sales optimization bot</p>
+            </div>
+          </div>
+          
+          <div class="similar-bot-card">
+            <div class="similar-bot-avatar">👩‍🔧</div>
+            <div class="similar-bot-info">
+              <h4>TechSupport</h4>
+              <p>Technical assistance bot</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <hr>
+  <footer>
+    <p>&copy; 2025 Shivam Verma | Chatbot Builder</p>
+  </footer>
+
+  <script src="/js/bot-preview.js"></script>
+</body>
+</html>

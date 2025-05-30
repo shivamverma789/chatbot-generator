@@ -19,7 +19,7 @@ exports.registerUser = async (req, res) => {
 };
 
 exports.loginUser = passport.authenticate('local', {
-  successRedirect: '/create-bot',
+  successRedirect: '/',
   failureRedirect: '/auth/login',
 });
 

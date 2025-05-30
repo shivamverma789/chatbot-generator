@@ -1,19 +1,172 @@
-<%- include('partials/header') %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Explore Bots - Chatbot Builder</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/explore.css">
+</head>
+<body>
+  <header>
+    <nav class="navbar">
+      <a href="/" class="navbar-brand">
+        <h1>🤖 Chatbot Builder</h1>
+      </a>
+      
+      <ul class="navbar-nav">
+        <li><a href="/">Home</a></li>
+        <% if (isAuthenticated) { %>
+          <li><a href="/create-bot">Create Bot</a></li>
+          <li><a href="/explore" class="active">Explore</a></li>
+          <li><a href="/my-bots">My Bots</a></li>
+          <li><a href="/auth/logout">Logout</a></li>
+        <% } else { %>
+          <li><a href="/auth/login">Login</a></li>
+          <li><a href="/auth/register">Register</a></li>
+        <% } %>
+      </ul>
 
-<h2>Explore Public Bots</h2>
+      <div class="hamburger" id="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </nav>
 
-<% if (bots.length === 0) { %>
-  <p>No public bots available right now.</p>
-<% } else { %>
-  <ul>
-    <% bots.forEach(bot => { %>
-      <li>
-        <strong><%= bot.name %></strong> by <%= bot.admin.name %> <br>
-        <p><strong>Description:</strong> <%= bot.description || "No description" %></p>
-        <a href="/bot/<%= bot._id %>/chat" class="btn">Chat</a>
-      </li>
-    <% }) %>
-  </ul>
-<% } %>
+    <div class="mobile-menu" id="mobileMenu">
+      <ul>
+        <li><a href="/">Home</a></li>
+        <% if (isAuthenticated) { %>
+          <li><a href="/create-bot">Create Bot</a></li>
+          <li><a href="/explore" class="active">Explore</a></li>
+          <li><a href="/my-bots">My Bots</a></li>
+          <li><a href="/auth/logout">Logout</a></li>
+        <% } else { %>
+          <li><a href="/auth/login">Login</a></li>
+          <li><a href="/auth/register">Register</a></li>
+        <% } %>
+      </ul>
+    </div>
+  </header>
 
-<%- include('partials/footer') %>
+  <main class="explore-main">
+    <div class="explore-container">
+      <div class="explore-header">
+        <h2 class="explore-title">Explore Public Bots</h2>
+        <p class="explore-subtitle">Discover amazing AI assistants created by our community</p>
+        
+        <div class="explore-filters">
+          <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Search bots..." class="search-input">
+            <div class="search-icon">🔍</div>
+          </div>
+          
+          <select id="typeFilter" class="filter-select">
+            <option value="">All Types</option>
+            <option value="basic">Basic Chatbot</option>
+            <option value="image_analyzer">Image Analyzer</option>
+            <option value="document_bot">Document Bot</option>
+          </select>
+          
+          <select id="sortFilter" class="filter-select">
+            <option value="newest">Newest First</option>
+            <option value="oldest">Oldest First</option>
+            <option value="name">Name A-Z</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="bots-grid" id="botsGrid">
+        <% if (bots.length === 0) { %>
+          <div class="no-bots">
+            <div class="no-bots-icon">🤖</div>
+            <h3>No Public Bots Available</h3>
+            <p>Be the first to create and share a public bot!</p>
+            <% if (isAuthenticated) { %>
+              <a href="/create-bot" class="create-bot-btn">Create Your First Bot</a>
+            <% } else { %>
+              <a href="/auth/register" class="create-bot-btn">Join to Create Bots</a>
+            <% } %>
+          </div>
+        <% } else { %>
+          <% bots.forEach(bot => { %>
+            <div class="bot-card" data-type="<%= bot.type %>" data-name="<%= bot.name.toLowerCase() %>" data-created="<%= bot.createdAt %>">
+              <div class="bot-card-header">
+                <div class="bot-avatar">
+                  <% if (bot.type === 'image_analyzer') { %>
+                    📸
+                  <% } else if (bot.type === 'document_bot') { %>
+                    📄
+                  <% } else { %>
+                    🤖
+                  <% } %>
+                </div>
+                <div class="bot-type-badge">
+                  <% if (bot.type === 'image_analyzer') { %>
+                    Image AI
+                  <% } else if (bot.type === 'document_bot') { %>
+                    Doc AI
+                  <% } else { %>
+                    Chat AI
+                  <% } %>
+                </div>
+              </div>
+              
+              <div class="bot-card-body">
+                <h3 class="bot-name"><%= bot.name %></h3>
+                <p class="bot-creator">by <span><%= bot.admin.name %></span></p>
+                <p class="bot-description">
+                  <%= bot.description ? (bot.description.length > 50 ? bot.description.substring(0, 50) + '...' : bot.description) : 'A helpful AI assistant ready to chat with you.' %>
+                </p>
+                
+                <div class="bot-features">
+                  <% if (bot.tone) { %>
+                    <span class="feature-tag"><%= bot.tone %></span>
+                  <% } %>
+                  <% if (bot.abilities) { %>
+                    <span class="feature-tag"><%= bot.abilities.split(',')[0].trim() %></span>
+                  <% } %>
+                </div>
+              </div>
+              
+              <div class="bot-card-footer">
+                <div class="bot-stats">
+                  <span class="stat">
+                    <span class="stat-icon">💬</span>
+                    <span class="stat-value"><%= bot.chatCount || 0 %></span>
+                  </span>
+                  <span class="stat">
+                    <span class="stat-icon">⭐</span>
+                    <span class="stat-value"><%= bot.rating || '4.5' %></span>
+                  </span>
+                </div>
+                <a href="/bot/<%= bot._id %>/chat" class="chat-btn">
+                  <span>Start Chat</span>
+                  <span class="btn-arrow">→</span>
+                </a>
+              </div>
+            </div>
+          <% }) %>
+        <% } %>
+      </div>
+      
+      <% if (bots.length > 0) { %>
+        <div class="load-more-container">
+          <button id="loadMoreBtn" class="load-more-btn">
+            <span>Load More Bots</span>
+            <div class="btn-glow"></div>
+          </button>
+        </div>
+      <% } %>
+    </div>
+  </main>
+
+  <hr>
+  <footer>
+    <p>&copy; 2025 Shivam Verma | Chatbot Builder</p>
+  </footer>
+
+  <script src="/js/explore.js"></script>
+</body>
+</html>
