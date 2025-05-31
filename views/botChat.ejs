@@ -18,7 +18,7 @@
         <li><a href="/">Home</a></li>
         <% if (isAuthenticated) { %>
           <li><a href="/create-bot">Create Bot</a></li>
-          <li><a href="/explore" class="active">Explore</a></li>
+          <li><a href="/explore" >Explore</a></li>
           <li><a href="/my-bots">My Bots</a></li>
           <li><a href="/auth/logout">Logout</a></li>
         <% } else { %>
@@ -39,7 +39,7 @@
         <li><a href="/">Home</a></li>
         <% if (isAuthenticated) { %>
           <li><a href="/create-bot">Create Bot</a></li>
-          <li><a href="/explore" class="active">Explore</a></li>
+          <li><a href="/explore" >Explore</a></li>
           <li><a href="/my-bots">My Bots</a></li>
           <li><a href="/auth/logout">Logout</a></li>
         <% } else { %>
@@ -50,24 +50,31 @@
     </div>
   </header>
 
+  <%
+    // Define avatar emoji mapping
+    const avatarEmoji = {
+      'Customer Support': '👩‍💼',
+      'Sales': '💼',
+      'Technical': '👨‍💻',
+      'Educational': '👩‍🏫',
+      'Entertainment': '🎭',
+      'Personal Assistant': '🧠',
+      'Health': '⚕️',
+      'Financial': '💰'
+    };
+    
+    // Get the appropriate emoji for this bot type
+    const botEmoji = avatarEmoji[bot.type] || '🤖';
+  %>
+
   <main class="chat-container">
     <div class="chat-sidebar">
       <div class="bot-profile">
-        <% const avatarEmoji = {
-          'Customer Support': '👩‍💼',
-          'Sales': '💼',
-          'Technical': '👨‍💻',
-          'Educational': '👩‍🏫',
-          'Entertainment': '🎭',
-          'Personal Assistant': '🧠',
-          'Health': '⚕️',
-          'Financial': '💰'
-        }; %>
         <div class="bot-avatar">
-          <span class="avatar-emoji"><%= avatarEmoji[bot.type] || '🤖' %></span>
+          <span class="avatar-emoji"><%= botEmoji %></span>
         </div>
         <div class="bot-info">
-          <h2 class="bot-name"><%= bot.name %></h2>
+          <h2 class="bot-name" title="<%= bot.name %>"><%= bot.name %></h2>
           <div class="bot-status">
             <span class="status-indicator"></span>
             <span>Online</span>
@@ -78,15 +85,15 @@
       <div class="bot-details">
         <div class="detail-item">
           <span class="detail-label">Type</span>
-          <span class="detail-value"><%= bot.type %></span>
+          <span class="detail-value" title="<%= bot.type %>"><%= bot.type %></span>
         </div>
         <div class="detail-item">
           <span class="detail-label">Tone</span>
-          <span class="detail-value"><%= bot.tone %></span>
+          <span class="detail-value" title="<%= bot.tone %>"><%= bot.tone %></span>
         </div>
         <div class="detail-item">
           <span class="detail-label">Goal</span>
-          <span class="detail-value"><%= bot.goal || 'Assist users' %></span>
+          <span class="detail-value" title="<%= bot.goal || 'Assist users' %>"><%= bot.goal || 'Assist users' %></span>
         </div>
       </div>
 
@@ -119,9 +126,10 @@
     <div class="chat-main">
       <div class="chat-header">
         <div class="chat-title">
-          <h2>Chat with <%= bot.name %></h2>
-          <p class="chat-subtitle"><%= bot.description || `A ${bot.tone.toLowerCase()} ${bot.type.toLowerCase()} chatbot` %></p>
-          
+          <h2 title="<%= bot.name %>">Chat with <%= bot.name %></h2>
+          <p class="chat-subtitle" title="<%= bot.description || `A ${bot.tone.toLowerCase()} ${bot.type.toLowerCase()} chatbot` %>">
+            <%= bot.description || `A ${bot.tone.toLowerCase()} ${bot.type.toLowerCase()} chatbot` %>
+          </p>
         </div>
         <div class="chat-controls">
           <button id="toggleSidebar" class="control-btn" title="Toggle Sidebar">
@@ -139,7 +147,7 @@
       <div id="chat-messages" class="chat-messages">
         <div class="chat-welcome">
           <div class="welcome-avatar">
-            <span class="avatar-emoji"><%= avatarEmoji[bot.type] || '🤖' %></span>
+            <span class="avatar-emoji"><%= botEmoji %></span>
           </div>
           <div class="welcome-message">
             <h3>Welcome to <%= bot.name %></h3>
@@ -148,12 +156,16 @@
               <% if (bot.abilities && bot.abilities.length) { %>
                 <p>I can help with:</p>
                 <ul>
-                  <% const abilitiesList = typeof bot.abilities === 'string' ? bot.abilities.split(',') : bot.abilities; %>
+                  <% 
+                    const abilitiesList = typeof bot.abilities === 'string' 
+                      ? bot.abilities.split(',').map(a => a.trim()).filter(a => a.length > 0)
+                      : Array.isArray(bot.abilities) ? bot.abilities : [];
+                  %>
                   <% abilitiesList.slice(0, 3).forEach(ability => { %>
-                    <li><%= ability.trim() %></li>
+                    <li><%= ability %></li>
                   <% }); %>
                   <% if (abilitiesList.length > 3) { %>
-                    <li>And more...</li>
+                    <li>And <%= abilitiesList.length - 3 %> more capabilities...</li>
                   <% } %>
                 </ul>
               <% } %>
@@ -174,14 +186,16 @@
               autocomplete="off"
               required
             >
-            <!-- <div class="input-actions">
+            <!-- Uncomment if you want to add file/emoji buttons
+            <div class="input-actions">
               <button type="button" id="attachButton" class="input-action-btn" title="Attach File">
                 <span class="action-icon">📎</span>
               </button>
               <button type="button" id="emojiButton" class="input-action-btn" title="Add Emoji">
                 <span class="action-icon">😊</span>
               </button>
-            </div> -->
+            </div>
+            -->
           </div>
           <button type="submit" class="send-button">
             <span class="send-icon">↑</span>
@@ -218,11 +232,20 @@
     </div>
   </div>
 
-  <hr>
   <footer>
     <p>&copy; 2025 Shivam Verma | Chatbot Builder</p>
   </footer>
 
+  <script>
+    // Pass bot data to JavaScript
+    window.botData = {
+      name: '<%= bot.name %>',
+      type: '<%= bot.type %>',
+      tone: '<%= bot.tone %>',
+      goal: '<%= bot.goal || "Assist users" %>',
+      emoji: '<%= botEmoji %>'
+    };
+  </script>
   <script src="/js/bot-chat.js"></script>
 </body>
 </html>

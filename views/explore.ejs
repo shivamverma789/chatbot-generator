@@ -92,7 +92,8 @@
         <% } else { %>
           <% bots.forEach(bot => { %>
             <div class="bot-card" data-type="<%= bot.type %>" data-name="<%= bot.name.toLowerCase() %>" data-created="<%= bot.createdAt %>">
-              <div class="bot-card-header">
+              <a href="/bot/<%= bot._id %>" class="bot-card-link">
+                <div class="bot-card-header">
                 <div class="bot-avatar">
                   <% if (bot.type === 'image_analyzer') { %>
                     📸
@@ -146,6 +147,7 @@
                   <span class="btn-arrow">→</span>
                 </a>
               </div>
+            </a>
             </div>
           <% }) %>
         <% } %>

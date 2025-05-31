@@ -286,7 +286,9 @@
 .stat-value {
   font-weight: 600;
 }
-
+.bot-card-link {
+ text-decoration: none;
+}
 .chat-btn {
   background: linear-gradient(135deg, var(--explore-accent), var(--explore-success));
   color: white;

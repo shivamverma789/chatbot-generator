@@ -38,9 +38,9 @@
       <ul>
         <li><a href="/">Home</a></li>
         <% if (isAuthenticated) { %>
-          <li><a href="/create-bot" class="active">Create Bot</a></li>
+          <li><a href="/create-bot" >Create Bot</a></li>
           <li><a href="/explore">Explore</a></li>
-          <li><a href="/my-bots">My Bots</a></li>
+          <li><a href="/my-bots" class="active">My Bots</a></li>
           <li><a href="/auth/logout">Logout</a></li>
         <% } else { %>
           <li><a href="/auth/login">Login</a></li>
@@ -118,7 +118,8 @@
         <div class="bots-grid" id="botsGrid">
           <% bots.forEach(bot => { %>
             <div class="bot-card" data-type="<%= bot.type %>" data-name="<%= bot.name.toLowerCase() %>" data-visibility="<%= bot.visibility %>" data-id="<%= bot._id %>">
-              <div class="bot-card-header">
+              <a href="/bot/<%= bot._id %>" class="bot-card-link">
+                <div class="bot-card-header">
                 <div class="bot-avatar">
                   <% if (bot.type === 'image_analyzer') { %>
                     📸
@@ -177,6 +178,7 @@
                   </form>
                 </div>
               </div>
+             </a>
             </div>
           <% }) %>
         </div>
@@ -224,6 +226,50 @@
   </div>
 
   <script>
+    document.addEventListener("DOMContentLoaded", () => {
+  // Initialize all functionality
+  initializeNavbar()
+  initializeFilters()
+  initializeAnimations()
+  initializeLoadMore()
+})
+
+function initializeNavbar() {
+  const hamburger = document.getElementById("hamburger")
+  const mobileMenu = document.getElementById("mobileMenu")
+
+  if (hamburger && mobileMenu) {
+    hamburger.addEventListener("click", () => {
+      hamburger.classList.toggle("active")
+      mobileMenu.classList.toggle("active")
+    })
+
+    // Close mobile menu when clicking outside
+    document.addEventListener("click", (e) => {
+      if (!hamburger.contains(e.target) && !mobileMenu.contains(e.target)) {
+        hamburger.classList.remove("active")
+        mobileMenu.classList.remove("active")
+      }
+    })
+
+    // Close mobile menu when clicking on a link
+    const mobileLinks = mobileMenu.querySelectorAll("a")
+    mobileLinks.forEach((link) => {
+      link.addEventListener("click", () => {
+        hamburger.classList.remove("active")
+        mobileMenu.classList.remove("active")
+      })
+    })
+
+    // Handle window resize
+    window.addEventListener("resize", () => {
+      if (window.innerWidth > 768) {
+        hamburger.classList.remove("active")
+        mobileMenu.classList.remove("active")
+      }
+    })
+  }
+}
     document.addEventListener('DOMContentLoaded', function() {
       // Initialize search and filters
       const searchInput = document.getElementById('searchInput');
@@ -340,6 +386,7 @@
         closeEmbedModal();
       }
     });
+    
   </script>
 </body>
 </html>
