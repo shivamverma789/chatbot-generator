@@ -30,7 +30,12 @@ exports.logoutUser = (req, res, next) => {
   });
 };
 
-// exports.googleCallback = passport.authenticate('google', {
-//   successRedirect: '/dashboard',
-//   failureRedirect: '/auth/login',
-// });
+exports.googleCallback = passport.authenticate('google', {
+  successRedirect: '/',
+  failureRedirect: '/auth/login',
+});
+
+exports.githubCallback = passport.authenticate('github', {
+    failureRedirect: '/auth/login',
+    successRedirect: '/'
+});

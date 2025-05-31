@@ -4,15 +4,12 @@ const dotenv = require('dotenv');
 const path = require('path');
 const session = require('express-session');
 const passport = require('passport');
-
-// Load environment variables
 dotenv.config();
 
-// Initialize app
 const app = express();
 
-// Passport config
-require('./utils/passportConfig')(passport); // Initialize local strategy
+
+require('./utils/passportConfig')(passport); 
 
 // Connect MongoDB
 mongoose.connect(process.env.MONGO_URI)
@@ -43,7 +40,7 @@ app.use((req, res, next) => {
   next();
 });
 
-// View engine
+// Views
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
@@ -54,11 +51,10 @@ const authRoutes = require('./routes/authRoutes');
 const embedRoutes = require('./routes/embedRoutes');
 
 app.use('/', indexRoutes);
-app.use('/', botRoutes);         // Use /bots to avoid path conflicts
-app.use('/auth', authRoutes);        // Login, register, etc.
+app.use('/', botRoutes);         
+app.use('/auth', authRoutes);       
 app.use('/', embedRoutes);
 
-// Start server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`🚀 Server running at http://localhost:${PORT}`);

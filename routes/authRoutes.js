@@ -16,7 +16,12 @@ router.post('/login', authController.loginUser);
 router.get('/logout', authController.logoutUser);
 
 // Google OAuth
-// router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
-// router.get('/google/callback', authController.googleCallback);
+router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+router.get('/google/callback', authController.googleCallback);
+
+// GitHub OAuth
+router.get('/github', passport.authenticate('github', { scope: ['user:email'] }));
+router.get('/github/callback', authController.githubCallback );
+
 
 module.exports = router;
